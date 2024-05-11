@@ -3,15 +3,19 @@ import os
 from PyQt6.QtWidgets import *
 from gui import *
 
+
 class Logic(QMainWindow, Ui_MainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
+        """
+        Method to set default values of logic object.
+        """
         super().__init__()
         self.setupUi(self)
 
         self.hide_area()
         self.enable_top('Side')
 
-        self.Button_zero.clicked.connect(lambda : self.on_button_clicked())
+        self.Button_zero.clicked.connect(lambda: self.on_button_clicked())
         self.Button_one.clicked.connect(lambda: self.on_button_clicked())
         self.Button_two.clicked.connect(lambda: self.on_button_clicked())
         self.Button_three.clicked.connect(lambda: self.on_button_clicked())
@@ -45,7 +49,11 @@ class Logic(QMainWindow, Ui_MainWindow):
         self.Radio_triangle.clicked.connect(lambda: self.shape_clicked())
         self.Radio_trapezoid.clicked.connect(lambda: self.shape_clicked())
 
-    def on_button_clicked(self):
+    def on_button_clicked(self) -> None:
+        """
+        Method called when any button is pressed, differentiates which button is
+        clicked and performs the proper action based on that
+        """
         button = self.sender()
         current_text = self.Display.text()
 
@@ -64,7 +72,8 @@ class Logic(QMainWindow, Ui_MainWindow):
                     self.Display.setText(str(result))
                 elif self.Radio_rectangle.isChecked() and self.Input_top.text() != '' and self.Input_middle.text() != '':
                     result = float(self.Input_top.text()) * float(self.Input_middle.text())
-                    f.write("Rectangle: Sides - " + str(self.Input_top.text()) + ' and ' + str(self.Input_middle.text()) + ' = ' + str(result) + '\n')
+                    f.write("Rectangle: Sides - " + str(self.Input_top.text()) + ' and ' + str(
+                        self.Input_middle.text()) + ' = ' + str(result) + '\n')
                     self.Display.setText(str(result))
                 elif self.Radio_circle.isChecked() and self.Input_top.text() != '':
                     result = math.pi * (float(self.Input_top.text()) ** 2)
@@ -72,11 +81,15 @@ class Logic(QMainWindow, Ui_MainWindow):
                     self.Display.setText(str(result))
                 elif self.Radio_triangle.isChecked() and self.Input_top.text() != '' and self.Input_middle.text() != '':
                     result = .5 * float(self.Input_top.text()) * float(self.Input_middle.text())
-                    f.write("Triangle: Base - " + str(self.Input_top.text()) + ' Height - ' + str(self.Input_middle.text()) + ' = ' + str(result) + '\n')
+                    f.write("Triangle: Base - " + str(self.Input_top.text()) + ' Height - ' + str(
+                        self.Input_middle.text()) + ' = ' + str(result) + '\n')
                     self.Display.setText(str(result))
                 elif self.Radio_trapezoid.isChecked() and self.Input_top.text() != '' and self.Input_middle.text() != '' and self.Input_bottom.text() != '':
-                    result = ((float(self.Input_top.text()) + float(self.Input_middle.text())) / 2) * float(self.Input_bottom.text())
-                    f.write("Trapezoid: Bases - " + str(self.Input_top.text()) + ' and ' + str(self.Input_middle.text()) + ' Height - ' + str(self.Input_bottom.text()) + ' = ' + str(result) + '\n')
+                    result = ((float(self.Input_top.text()) + float(self.Input_middle.text())) / 2) * float(
+                        self.Input_bottom.text())
+                    f.write("Trapezoid: Bases - " + str(self.Input_top.text()) + ' and ' + str(
+                        self.Input_middle.text()) + ' Height - ' + str(self.Input_bottom.text()) + ' = ' + str(
+                        result) + '\n')
                     self.Display.setText(str(result))
 
                 else:
@@ -120,9 +133,11 @@ class Logic(QMainWindow, Ui_MainWindow):
         else:
             self.Display.setText(current_text + button.text())
 
-
-
-    def shape_clicked(self):
+    def shape_clicked(self) -> None:
+        """
+        Method called when a shape radio button is clicked. Used to show and hide
+        widgets based on necessity per shape
+        """
         if self.Radio_square.isChecked():
             self.enable_top("Side")
             self.disable_middle()
@@ -144,8 +159,10 @@ class Logic(QMainWindow, Ui_MainWindow):
             self.enable_middle("Base 2")
             self.enable_bottom("Height")
 
-
-    def hide_area(self):
+    def hide_area(self) -> None:
+        """
+        Hides all the widgets used to calculate area
+        """
         self.Input_top.hide()
         self.Input_middle.hide()
         self.Input_bottom.hide()
@@ -156,48 +173,75 @@ class Logic(QMainWindow, Ui_MainWindow):
         self.Button_middle.hide()
         self.Button_bottom.hide()
 
-    def delete_last(self):
+    def delete_last(self) -> None:
+        """
+        Deletes the last character in the display
+        """
         text = self.Display.text()
         text = text[:-1]
         self.Display.setText(text)
 
-    def enable_top(self, text: str):
+    def enable_top(self, text: str) -> None:
+        """
+        Unhides the top widgets used in calculating area
+        :param text: Used to change the text of Label_top
+        """
         self.Input_top.show()
         self.Button_top.show()
         self.Button_top_clear.show()
         self.Label_top.setText(text)
 
-    def disable_top(self):
+    def disable_top(self) -> None:
+        """
+        Hides the top widgets used in calculating area
+        """
         self.Input_top.hide()
         self.Button_top.hide()
         self.Button_top_clear.hide()
         self.Label_top.setText('')
 
-    def enable_middle(self, text: str):
+    def enable_middle(self, text: str) -> None:
+        """
+        Unhides the middle widgets used in calculating area
+        :param text: Used to change the text of Label_middle
+        """
         self.Input_middle.show()
         self.Button_middle.show()
         self.Button_middle_clear.show()
         self.Label_middle.setText(text)
 
-    def disable_middle(self):
+    def disable_middle(self) -> None:
+        """
+        Hides the middle widgets used in calculating area
+        """
         self.Input_middle.hide()
         self.Button_middle.hide()
         self.Button_middle_clear.hide()
         self.Label_middle.setText('')
 
-    def enable_bottom(self, text: str):
+    def enable_bottom(self, text: str) -> None:
+        """
+        Unhides the bottom widgets used in calculating area
+        :param text: Used to change the text of Label_bottom
+        """
         self.Input_bottom.show()
         self.Button_bottom.show()
         self.Button_bottom_clear.show()
         self.Label_bottom.setText(text)
 
-    def disable_bottom(self):
+    def disable_bottom(self) -> None:
+        """
+        Hides the bottom widgets used in calculating area
+        """
         self.Input_bottom.hide()
         self.Button_bottom.hide()
         self.Button_bottom_clear.hide()
         self.Label_bottom.setText('')
 
-    def input_top(self):
+    def input_top(self) -> None:
+        """
+        Sends what is in the display to the top input used for calculating area
+        """
         try:
             num = self.Display.text()
             self.Input_top.setText(num)
@@ -205,10 +249,16 @@ class Logic(QMainWindow, Ui_MainWindow):
         except:
             pass
 
-    def clear_top(self):
+    def clear_top(self) -> None:
+        """
+        Clears anything in the top input used for calculating area
+        """
         self.Input_top.setText('')
 
-    def input_middle(self):
+    def input_middle(self) -> None:
+        """
+        Sends what is in the display to the middle input used for calculating area
+        """
         try:
             num = self.Display.text()
             self.Input_middle.setText(num)
@@ -216,10 +266,16 @@ class Logic(QMainWindow, Ui_MainWindow):
         except:
             pass
 
-    def clear_middle(self):
+    def clear_middle(self) -> None:
+        """
+        Clears anything in the middle input used for calculating area
+        """
         self.Input_middle.setText('')
 
-    def input_bottom(self):
+    def input_bottom(self) -> None:
+        """
+        Sends what is in the display to the bottom input used for calculating area
+        """
         try:
             num = self.Display.text()
             self.Input_bottom.setText(num)
@@ -227,5 +283,8 @@ class Logic(QMainWindow, Ui_MainWindow):
         except:
             pass
 
-    def clear_bottom(self):
+    def clear_bottom(self) -> None:
+        """
+        Clears anything in the bottom input used for calculating area
+        """
         self.Input_bottom.setText('')
