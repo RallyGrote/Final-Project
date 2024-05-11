@@ -1,5 +1,5 @@
 import math
-
+import os
 from PyQt6.QtWidgets import *
 from gui import *
 
@@ -9,6 +9,7 @@ class Logic(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
 
         self.hide_area()
+        self.enable_top('Side')
 
         self.Button_zero.clicked.connect(lambda : self.on_button_clicked())
         self.Button_one.clicked.connect(lambda: self.on_button_clicked())
@@ -56,25 +57,34 @@ class Logic(QMainWindow, Ui_MainWindow):
 
         if button.text() == '=':
             try:
+                f = open("history.txt", "a")
                 if self.Radio_square.isChecked() and self.Input_top.text() != '':
                     result = float(self.Input_top.text()) ** 2
+                    f.write("Square: Sides - " + str(self.input_top()) + ' = ' + str(result) + '\n')
                     self.Display.setText(str(result))
                 elif self.Radio_rectangle.isChecked() and self.Input_top.text() != '' and self.Input_middle.text() != '':
                     result = float(self.Input_top.text()) * float(self.Input_middle.text())
+                    f.write("Rectangle: Sides - " + str(self.Input_top.text()) + ' and ' + str(self.Input_middle.text()) + ' = ' + str(result) + '\n')
                     self.Display.setText(str(result))
                 elif self.Radio_circle.isChecked() and self.Input_top.text() != '':
                     result = math.pi * (float(self.Input_top.text()) ** 2)
+                    f.write("Circle: Radius - " + str(self.Input_top.text()) + ' = ' + str(result) + '\n')
                     self.Display.setText(str(result))
                 elif self.Radio_triangle.isChecked() and self.Input_top.text() != '' and self.Input_middle.text() != '':
                     result = .5 * float(self.Input_top.text()) * float(self.Input_middle.text())
+                    f.write("Triangle: Base - " + str(self.Input_top.text()) + ' Height - ' + str(self.Input_middle.text()) + ' = ' + str(result) + '\n')
                     self.Display.setText(str(result))
                 elif self.Radio_trapezoid.isChecked() and self.Input_top.text() != '' and self.Input_middle.text() != '' and self.Input_bottom.text() != '':
                     result = ((float(self.Input_top.text()) + float(self.Input_middle.text())) / 2) * float(self.Input_bottom.text())
+                    f.write("Trapezoid: Bases - " + str(self.Input_top.text()) + ' and ' + str(self.Input_middle.text()) + ' Height - ' + str(self.Input_bottom.text()) + ' = ' + str(result) + '\n')
                     self.Display.setText(str(result))
 
                 else:
-                    result = str(eval(current_text)) # consider changing this
+                    result = str(eval(current_text))
+                    f.write("Calculator: " + str(self.Display.text()) + '=' + result + '\n')
                     self.Display.setText(result)
+
+                f.close()
 
             except ZeroDivisionError:
                 self.Display.setText("Invalid")
@@ -84,6 +94,8 @@ class Logic(QMainWindow, Ui_MainWindow):
         elif button.text() == 'DEL':
             try:
                 self.delete_last()
+                if self.Display.text() == '':
+                    self.Display.setText('0')
 
             except:
                 pass
@@ -97,6 +109,10 @@ class Logic(QMainWindow, Ui_MainWindow):
 
             except:
                 pass
+
+        elif button.text() == 'History':
+            os.startfile('file.txt')  # Note: unable to test if this works on non-windows systems
+
 
         elif button.text() == 'C':
             self.Display.setText('0')
