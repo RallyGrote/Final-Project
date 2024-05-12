@@ -124,7 +124,7 @@ class Logic(QMainWindow, Ui_MainWindow):
                 pass
 
         elif button.text() == 'History':
-            os.startfile('file.txt')  # Note: unable to test if this works on non-windows systems
+            os.startfile('history.txt')  # Note: unable to test if this works on non-windows systems
 
 
         elif button.text() == 'C':
